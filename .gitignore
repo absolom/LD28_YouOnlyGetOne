@@ -1,0 +1,7 @@
+res/
+bin/
+work_log.txt
+.classpath
+.project
+.settings/
+log.log

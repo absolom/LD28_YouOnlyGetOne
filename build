@@ -1,4 +1,4 @@
-javac -d bin -sourcepath src -classpath lib src/ld/LudumDareGame.java \
+javac -d bin -sourcepath src -classpath lib/lwjgl.jar\;lib/lwjgl_util.jar\;lib/slick.jar\;lib/snakeyaml-1.11.jar src/ld/LudumDareGame.java \
 && \
-java -Djava.library.path=lib/windows -classpath bin ld.LudumDareGame
+java -Djava.library.path=lib/windows -classpath lib/lwjgl.jar\;lib/lwjgl_util.jar\;lib/slick.jar\;lib/snakeyaml-1.11.jar\;bin ld.LudumDareGame
 # &> log.log

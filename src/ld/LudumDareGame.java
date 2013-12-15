@@ -6,9 +6,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LudumDareGame
+import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.BasicGame;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
+
+import com.artemis.World;
+
+public class LudumDareGame extends BasicGame
 {
-    static public void main(String[] args)
+    public static final int WIDTH = 1024;
+    public static final int HEIGHT = 768;
+    public static final int UPDATE_PERIOD = 33;
+
+    static public void main(String[] args) throws SlickException
     {
         try
         {
@@ -28,10 +40,55 @@ public class LudumDareGame
             map.setData(lines);
 
             System.out.println(map.toString());
+
+            AppGameContainer app = new AppGameContainer(new LudumDareGame(new World()));
+
+            app.setDisplayMode(WIDTH, HEIGHT, false);
+            app.start();
         }
         catch(IOException e)
         {
             e.printStackTrace();
         }
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    World world;
+    int timeSinceLastUpdate;
+
+    public LudumDareGame(World w)
+    {
+        super("Ludum Dare 28 - You only get one AIRSTRIKE!");
+        world = w;
+    }
+
+    @Override
+    public void render(GameContainer container, Graphics g) throws SlickException
+    {
+        g.clear();
+
+        // TODO: Render the map here
+    }
+
+    @Override
+    public void init(GameContainer c) throws SlickException
+    {
+        timeSinceLastUpdate = 0;
+
+        // TODO: Load tiles here
+    }
+
+    @Override
+    public void update(GameContainer container, int delta) throws SlickException
+    {
+        timeSinceLastUpdate += delta;
+        while(timeSinceLastUpdate >= UPDATE_PERIOD)
+        {
+            world.setDelta(UPDATE_PERIOD);
+            world.process(false);
+            timeSinceLastUpdate -= UPDATE_PERIOD;
+        }
+    }
 }
+

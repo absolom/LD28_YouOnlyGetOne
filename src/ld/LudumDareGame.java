@@ -4,12 +4,15 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import com.artemis.World;
@@ -19,6 +22,7 @@ public class LudumDareGame extends BasicGame
     public static final int WIDTH = 1024;
     public static final int HEIGHT = 768;
     public static final int UPDATE_PERIOD = 33;
+    public static final float SCALE = 3f;
 
     static public void main(String[] args) throws SlickException
     {
@@ -56,6 +60,7 @@ public class LudumDareGame extends BasicGame
 
     World world;
     int timeSinceLastUpdate;
+    Map<Integer, Image> tileImages;
 
     public LudumDareGame(World w)
     {
@@ -69,14 +74,38 @@ public class LudumDareGame extends BasicGame
         g.clear();
 
         // TODO: Render the map here
+        Image tmp = tileImages.get(1);
+        tmp.draw(300, 300, SCALE);
+
+        tmp = tileImages.get(2);
+        tmp.draw(400, 300, SCALE);
+
+        tmp = tileImages.get(3);
+        tmp.draw(300, 400, SCALE);
+
+        tmp = tileImages.get(4);
+        tmp.draw(400, 400, SCALE);
     }
 
     @Override
     public void init(GameContainer c) throws SlickException
     {
         timeSinceLastUpdate = 0;
+        Image image;
 
-        // TODO: Load tiles here
+        tileImages = new HashMap<>();
+        image = new Image("res/path.png");
+        image.setFilter(Image.FILTER_NEAREST);
+        tileImages.put(1, image);
+        image = new Image("res/test_tile3.png");
+        image.setFilter(Image.FILTER_NEAREST);
+        tileImages.put(2, image);
+        image = new Image("res/forest_tiles_med0.png");
+        image.setFilter(Image.FILTER_NEAREST);
+        tileImages.put(3, image);
+        image = new Image("res/grass.png");
+        image.setFilter(Image.FILTER_NEAREST);
+        tileImages.put(4, image);
     }
 
     @Override

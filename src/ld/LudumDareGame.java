@@ -45,7 +45,7 @@ public class LudumDareGame extends BasicGame
 
             System.out.println(map.toString());
 
-            AppGameContainer app = new AppGameContainer(new LudumDareGame(new World()));
+            AppGameContainer app = new AppGameContainer(new LudumDareGame(map, new World()));
 
             app.setDisplayMode(WIDTH, HEIGHT, false);
             app.start();
@@ -61,11 +61,14 @@ public class LudumDareGame extends BasicGame
     World world;
     int timeSinceLastUpdate;
     Map<Integer, Image> tileImages;
+    TileMap map;
 
-    public LudumDareGame(World w)
+    public LudumDareGame(TileMap map, World w)
     {
         super("Ludum Dare 28 - You only get one AIRSTRIKE!");
         world = w;
+
+        this.map = map;
     }
 
     @Override
@@ -73,18 +76,27 @@ public class LudumDareGame extends BasicGame
     {
         g.clear();
 
-        // TODO: Render the map here
-        Image tmp = tileImages.get(1);
-        tmp.draw(300, 300, SCALE);
+        int w = map.getWidth();
+        int h = map.getHeight();
+        float d = 4f * SCALE;
 
-        tmp = tileImages.get(2);
-        tmp.draw(400, 300, SCALE);
+        for(int i = 0; i < w; i++)
+        {
+            for(int j = 0; j < h; j++)
+            {
+                int tileId = map.getTileId(i,j);
 
-        tmp = tileImages.get(3);
-        tmp.draw(300, 400, SCALE);
+                if(tileId == 0)
+                    continue;
 
-        tmp = tileImages.get(4);
-        tmp.draw(400, 400, SCALE);
+                Image tile = tileImages.get(tileId);
+
+                float x = i*d;
+                float y = j*d - (tile.getHeight()-4)*SCALE;
+
+                tile.draw(x,y,SCALE);
+            }
+        }
     }
 
     @Override

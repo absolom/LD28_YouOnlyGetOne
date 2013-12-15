@@ -1,9 +1,6 @@
 package ld;
 
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.EOFException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -41,6 +38,24 @@ public class TileMap
 
             tileData.add(rowData);
         }
+        
+        numRows = tileData.size();
+        numColumns = tileData.get(0).size();
+    }
+
+    public int getWidth()
+    {
+        return numColumns;
+    }
+
+    public int getHeight()
+    {
+        return numRows;
+    }
+
+    public int getTileId(int x, int y)
+    {
+        return tileData.get(y).get(x);
     }
 
     @Override

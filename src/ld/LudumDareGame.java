@@ -132,8 +132,8 @@ public class LudumDareGame extends BasicGame
         BestFirstSearch bfs = new BestFirstSearch(map);
 
         // Create systems
-        GuardSystem patrol = new GuardSystem();
-        world.setSystem(patrol);
+        GuardSystem guardSystem = new GuardSystem();
+        world.setSystem(guardSystem);
         guardRenderSystem = new GuardRenderSystem(image);
         world.setSystem(guardRenderSystem, true);
 

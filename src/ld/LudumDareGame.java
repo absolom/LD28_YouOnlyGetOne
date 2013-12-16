@@ -99,7 +99,7 @@ public class LudumDareGame extends BasicGame
                 tile.draw(x,y,SCALE);
             }
         }
-        
+
         guardRenderSystem.process();
     }
 
@@ -124,7 +124,7 @@ public class LudumDareGame extends BasicGame
         image = new Image("res/grass.png");
         image.setFilter(Image.FILTER_NEAREST);
         tileImages.put(4, image);
-        
+
         image = new Image("res/guard.png");
         image.setFilter(Image.FILTER_NEAREST);
 
@@ -133,26 +133,68 @@ public class LudumDareGame extends BasicGame
         world.setSystem(patrol);
         guardRenderSystem = new GuardRenderSystem(image);
         world.setSystem(guardRenderSystem, true);
-        
+
         // Create some guards
-        List<MapLocation> path0 = new ArrayList<>();
-        path0.add(new MapLocation(22, 11));
-        path0.add(new MapLocation(22, 21));
-        path0.add(new MapLocation(28, 21));
-        path0.add(new MapLocation(28, 11));
-        
-        Entity guard = world.createEntity();        
-            MapLocation waypoint0 = path0.get(0);
+        List<MapLocation> path = new ArrayList<>();
+        path.add(new MapLocation(22, 11));
+        path.add(new MapLocation(22, 21));
+        path.add(new MapLocation(28, 21));
+        path.add(new MapLocation(28, 11));
+
+        Entity guard = world.createEntity();
+            MapLocation waypoint0 = path.get(0);
             Position p = new Position();
             p.xTile = waypoint0.xTile;
             p.yTile = waypoint0.yTile;
             guard.addComponent(p);
             GuardState gs = new GuardState();
-            gs.activity = new Patrol(path0);
+            gs.activity = new Patrol(path);
             gs.waitTimeBeforeMove = 25;
             guard.addComponent(gs);
         guard.addToWorld();
-        
+
+        //
+
+        path = new ArrayList<>();
+        path.add(new MapLocation(20, 3));
+        path.add(new MapLocation(31, 3));
+        path.add(new MapLocation(31, 11));
+        path.add(new MapLocation(20, 11));
+
+        guard = world.createEntity();
+            waypoint0 = path.get(0);
+            p = new Position();
+            p.xTile = waypoint0.xTile;
+            p.yTile = waypoint0.yTile;
+            guard.addComponent(p);
+            gs = new GuardState();
+            gs.activity = new Patrol(path);
+            gs.waitTimeBeforeMove = 35;
+            guard.addComponent(gs);
+        guard.addToWorld();
+
+        //
+
+        path = new ArrayList<>();
+        path.add(new MapLocation(33, 21));
+        path.add(new MapLocation(25, 21));
+        path.add(new MapLocation(25, 26));
+        path.add(new MapLocation(29, 26));
+        path.add(new MapLocation(29, 28));
+        path.add(new MapLocation(33, 28));
+
+        guard = world.createEntity();
+            waypoint0 = path.get(0);
+            p = new Position();
+            p.xTile = waypoint0.xTile;
+            p.yTile = waypoint0.yTile;
+            guard.addComponent(p);
+            gs = new GuardState();
+            gs.activity = new Patrol(path);
+            gs.waitTimeBeforeMove = 15;
+            guard.addComponent(gs);
+        guard.addToWorld();
+
         world.initialize();
     }
 

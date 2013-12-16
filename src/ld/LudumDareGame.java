@@ -127,6 +127,9 @@ public class LudumDareGame extends BasicGame
 
         image = new Image("res/guard.png");
         image.setFilter(Image.FILTER_NEAREST);
+        
+        // Create map navigation logic
+        BestFirstSearch bfs = new BestFirstSearch(map);
 
         // Create systems
         GuardSystem patrol = new GuardSystem();
@@ -148,7 +151,7 @@ public class LudumDareGame extends BasicGame
             p.yTile = waypoint0.yTile;
             guard.addComponent(p);
             GuardState gs = new GuardState();
-            gs.activity = new Patrol(path);
+            gs.activity.addFirst(new Patrol(path, bfs));
             gs.waitTimeBeforeMove = 25;
             guard.addComponent(gs);
         guard.addToWorld();
@@ -168,7 +171,7 @@ public class LudumDareGame extends BasicGame
             p.yTile = waypoint0.yTile;
             guard.addComponent(p);
             gs = new GuardState();
-            gs.activity = new Patrol(path);
+            gs.activity.addFirst(new Patrol(path, bfs));
             gs.waitTimeBeforeMove = 35;
             guard.addComponent(gs);
         guard.addToWorld();
@@ -190,7 +193,7 @@ public class LudumDareGame extends BasicGame
             p.yTile = waypoint0.yTile;
             guard.addComponent(p);
             gs = new GuardState();
-            gs.activity = new Patrol(path);
+            gs.activity.addFirst(new Patrol(path, bfs));
             gs.waitTimeBeforeMove = 15;
             guard.addComponent(gs);
         guard.addToWorld();

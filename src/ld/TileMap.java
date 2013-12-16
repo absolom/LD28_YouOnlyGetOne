@@ -57,6 +57,33 @@ public class TileMap
     {
         return tileData.get(y).get(x);
     }
+    
+    public boolean isPassable(MapLocation loc)
+    {
+        int id = getTileId(loc.xTile, loc.yTile);
+        
+//        if(id == 0)
+//        {
+//            while((id = getTileId(loc.xTile, loc.yTile)) == 0)
+//                loc.xTile -= 1;
+//            loc.xTile += 1;
+//            
+//            while((id = getTileId(loc.xTile, loc.yTile)) == 0)
+//                loc.yTile += 1;                
+//        }
+        
+        switch(id)
+        {
+            case 1:
+                return true;
+            case 0:
+            case 2:
+            case 3:
+            case 4:
+            default:
+                return false;            
+        }        
+    }
 
     @Override
     public String toString()

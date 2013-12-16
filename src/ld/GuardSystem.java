@@ -10,7 +10,7 @@ public class GuardSystem extends EntityProcessingSystem
 {
     @Mapper ComponentMapper<Position> pm;
     @Mapper ComponentMapper<GuardState> gsm;
-
+    
     @SuppressWarnings("unchecked")
     public GuardSystem()
     {
@@ -25,7 +25,8 @@ public class GuardSystem extends EntityProcessingSystem
 
         if(s.timeSpentWaiting++ >= s.waitTimeBeforeMove)
         {
-            MoveDirection md = s.activity.getMoveDirection();
+            GuardActivity activityCurr = s.activity.peekFirst();
+            MoveDirection md = activityCurr.getMoveDirection();
 
             switch(md)
             {
@@ -55,7 +56,12 @@ public class GuardSystem extends EntityProcessingSystem
                 }
             }
 
-            s.activity = s.activity.newMapLocation(new MapLocation(p.xTile, p.yTile));
+            GuardActivity activityNew = activityCurr.newMapLocation(new MapLocation(p.xTile, p.yTile));
+            if(activityNew == null)
+                s.activity.removeFirst();
+            else if(activityNew != activityCurr)
+                s.activity.addFirst(activityNew);
+
             s.timeSpentWaiting = 0;
         }
     }

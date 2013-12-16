@@ -15,6 +15,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import com.artemis.Entity;
 import com.artemis.World;
 
 public class LudumDareGame extends BasicGame
@@ -22,7 +23,7 @@ public class LudumDareGame extends BasicGame
     public static final int WIDTH = 1024;
     public static final int HEIGHT = 768;
     public static final int UPDATE_PERIOD = 33;
-    public static final float SCALE = 3f;
+    public static final float SCALE = 4f;
 
     static public void main(String[] args) throws SlickException
     {
@@ -62,6 +63,7 @@ public class LudumDareGame extends BasicGame
     int timeSinceLastUpdate;
     Map<Integer, Image> tileImages;
     TileMap map;
+    GuardRenderSystem guardRenderSystem;
 
     public LudumDareGame(TileMap map, World w)
     {
@@ -97,12 +99,16 @@ public class LudumDareGame extends BasicGame
                 tile.draw(x,y,SCALE);
             }
         }
+        
+        guardRenderSystem.process();
     }
 
     @Override
     public void init(GameContainer c) throws SlickException
     {
         timeSinceLastUpdate = 0;
+
+        // Load images
         Image image;
 
         tileImages = new HashMap<>();
@@ -118,6 +124,36 @@ public class LudumDareGame extends BasicGame
         image = new Image("res/grass.png");
         image.setFilter(Image.FILTER_NEAREST);
         tileImages.put(4, image);
+        
+        image = new Image("res/guard.png");
+        image.setFilter(Image.FILTER_NEAREST);
+
+        // Create systems
+        GuardSystem patrol = new GuardSystem();
+        world.setSystem(patrol);
+        guardRenderSystem = new GuardRenderSystem(image);
+        world.setSystem(guardRenderSystem, true);
+        
+        // Create some guards
+        List<MapLocation> path0 = new ArrayList<>();
+        path0.add(new MapLocation(22, 11));
+        path0.add(new MapLocation(22, 21));
+        path0.add(new MapLocation(28, 21));
+        path0.add(new MapLocation(28, 11));
+        
+        Entity guard = world.createEntity();        
+            MapLocation waypoint0 = path0.get(0);
+            Position p = new Position();
+            p.xTile = waypoint0.xTile;
+            p.yTile = waypoint0.yTile;
+            guard.addComponent(p);
+            GuardState gs = new GuardState();
+            gs.activity = new Patrol(path0);
+            gs.waitTimeBeforeMove = 25;
+            guard.addComponent(gs);
+        guard.addToWorld();
+        
+        world.initialize();
     }
 
     @Override

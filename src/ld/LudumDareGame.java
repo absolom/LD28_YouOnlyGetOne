@@ -198,6 +198,32 @@ public class LudumDareGame extends BasicGame
             guard.addComponent(gs);
         guard.addToWorld();
 
+        //
+
+        path = new ArrayList<>();
+        path.add(new MapLocation(26, 34));
+        path.add(new MapLocation(38, 34));
+        path.add(new MapLocation(38, 16));
+        path.add(new MapLocation(28, 16));
+        path.add(new MapLocation(28, 21));
+        path.add(new MapLocation(25, 21));
+        path.add(new MapLocation(25, 26));
+        path.add(new MapLocation(20, 26));
+        path.add(new MapLocation(20, 31));
+        path.add(new MapLocation(26, 31));
+
+        guard = world.createEntity();
+            waypoint0 = path.get(0);
+            p = new Position();
+            p.xTile = waypoint0.xTile;
+            p.yTile = waypoint0.yTile;
+            guard.addComponent(p);
+            gs = new GuardState();
+            gs.activity.addFirst(new Patrol(path, bfs));
+            gs.waitTimeBeforeMove = 15;
+            guard.addComponent(gs);
+        guard.addToWorld();
+
         world.initialize();
     }
 

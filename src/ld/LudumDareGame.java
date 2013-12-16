@@ -20,8 +20,8 @@ import com.artemis.World;
 
 public class LudumDareGame extends BasicGame
 {
-    public static final int WIDTH = 1024;
-    public static final int HEIGHT = 768;
+    public static final int WIDTH = 640;
+    public static final int HEIGHT = 640;
     public static final int UPDATE_PERIOD = 33;
     public static final float SCALE = 4f;
 

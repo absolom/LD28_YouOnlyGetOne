@@ -27,6 +27,8 @@ public class Investigate implements GuardActivity
     @Override
     public GuardActivity newMapLocation(MapLocation locNew)
     {
+        indexCurrent++;
+        
         if(locNew.equals(path.get(path.size()-1)))
         {
             if(goingTo)
@@ -34,6 +36,7 @@ public class Investigate implements GuardActivity
                 // TODO: Set delay for next move
                 // TODO: Change speed
                 Collections.reverse(path);
+                indexCurrent = 0;
                 goingTo = false;
                 return this;
             }

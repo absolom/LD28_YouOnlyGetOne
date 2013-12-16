@@ -13,7 +13,7 @@ public enum MoveDirection
         double dX = end.xTile - start.xTile;
         double dY = end.yTile - start.yTile;
 
-        if(dX > dY)
+        if(Math.abs(dX) > Math.abs(dY))
         {
             if(dX < 0)
                 return WEST;

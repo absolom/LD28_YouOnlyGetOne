@@ -67,7 +67,7 @@ public class LudumDareGame extends BasicGame
 
     public LudumDareGame(TileMap map, World w)
     {
-        super("Ludum Dare 28 - You only get one AIRSTRIKE!");
+        super("Ludum Dare 28 - YOGO chance to stop those NINJAS!");
         world = w;
 
         this.map = map;

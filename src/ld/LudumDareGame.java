@@ -159,6 +159,10 @@ public class LudumDareGame extends BasicGame
         path.add(new MapLocation(22, 21));
         path.add(new MapLocation(28, 21));
         path.add(new MapLocation(28, 11));
+        path.add(new MapLocation(31, 11));
+        path.add(new MapLocation(31, 3));
+        path.add(new MapLocation(20, 3));
+        path.add(new MapLocation(20, 11));
 
         Entity guard = world.createEntity();
             MapLocation waypoint0 = path.get(0);
@@ -178,7 +182,12 @@ public class LudumDareGame extends BasicGame
         path.add(new MapLocation(20, 3));
         path.add(new MapLocation(31, 3));
         path.add(new MapLocation(31, 11));
+        path.add(new MapLocation(28, 11));
+        path.add(new MapLocation(28, 21));
+        path.add(new MapLocation(22, 21));
+        path.add(new MapLocation(22, 11));
         path.add(new MapLocation(20, 11));
+        path.add(new MapLocation(20, 3));
 
         guard = world.createEntity();
             waypoint0 = path.get(0);
@@ -198,9 +207,13 @@ public class LudumDareGame extends BasicGame
         path.add(new MapLocation(33, 21));
         path.add(new MapLocation(25, 21));
         path.add(new MapLocation(25, 26));
-        path.add(new MapLocation(29, 26));
-        path.add(new MapLocation(29, 28));
-        path.add(new MapLocation(33, 28));
+        path.add(new MapLocation(20, 26));
+        path.add(new MapLocation(20, 31));
+        path.add(new MapLocation(26, 31));
+        path.add(new MapLocation(26, 34));
+        path.add(new MapLocation(38, 34));
+        path.add(new MapLocation(38, 25));
+        path.add(new MapLocation(33, 25));
 
         guard = world.createEntity();
             waypoint0 = path.get(0);
@@ -263,6 +276,68 @@ public class LudumDareGame extends BasicGame
             p.yTile = waypoint0.yTile;
             ninja.addComponent(p);
             NinjaState ns = new NinjaState();
+            ns.activity.addFirst(new Infiltrate(path));
+            ns.waitTimeBeforeMove = 8;
+            ninja.addComponent(ns);
+        ninja.addToWorld();
+
+        //
+
+        path = new ArrayList<>();
+        path.add(new MapLocation(0, 34));
+        path.add(new MapLocation(15, 34));
+        path.add(new MapLocation(15, 36));
+        path.add(new MapLocation(26, 36));
+        path.add(new MapLocation(26, 31));
+        path.add(new MapLocation(29, 31));
+        path.add(new MapLocation(29, 28));
+        path.add(new MapLocation(33, 28));
+        path.add(new MapLocation(33, 25));
+        path.add(new MapLocation(38, 25));
+        path.add(new MapLocation(38, 16));
+        path.add(new MapLocation(39, 16));
+        path.add(new MapLocation(39, 11));
+        path.add(new MapLocation(37, 11));
+
+        ninja = world.createEntity();
+            waypoint0 = path.get(0);
+            p = new Position();
+            p.xTile = waypoint0.xTile;
+            p.yTile = waypoint0.yTile;
+            ninja.addComponent(p);
+            ns = new NinjaState();
+            ns.activity.addFirst(new Infiltrate(path));
+            ns.waitTimeBeforeMove = 8;
+            ninja.addComponent(ns);
+        ninja.addToWorld();
+
+        //
+
+        path = new ArrayList<>();
+        path.add(new MapLocation(0, 34));
+        path.add(new MapLocation(15, 34));
+        path.add(new MapLocation(15, 11));
+        path.add(new MapLocation(22, 11));
+        path.add(new MapLocation(22, 21));
+        path.add(new MapLocation(25, 21));
+        path.add(new MapLocation(25, 26));
+        path.add(new MapLocation(29, 26));
+        path.add(new MapLocation(29, 31));
+        path.add(new MapLocation(26, 31));
+        path.add(new MapLocation(26, 34));
+        path.add(new MapLocation(38, 34));
+        path.add(new MapLocation(38, 16));
+        path.add(new MapLocation(39, 16));
+        path.add(new MapLocation(39, 11));
+        path.add(new MapLocation(37, 11));
+
+        ninja = world.createEntity();
+            waypoint0 = path.get(0);
+            p = new Position();
+            p.xTile = waypoint0.xTile;
+            p.yTile = waypoint0.yTile;
+            ninja.addComponent(p);
+            ns = new NinjaState();
             ns.activity.addFirst(new Infiltrate(path));
             ns.waitTimeBeforeMove = 8;
             ninja.addComponent(ns);

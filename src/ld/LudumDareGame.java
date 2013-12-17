@@ -64,6 +64,8 @@ public class LudumDareGame extends BasicGame
     Map<Integer, Image> tileImages;
     TileMap map;
     GuardRenderSystem guardRenderSystem;
+    NinjaRenderSystem ninjaRenderSystem;
+    LordRenderSystem lordRenderSystem;
 
     public LudumDareGame(TileMap map, World w)
     {
@@ -101,6 +103,8 @@ public class LudumDareGame extends BasicGame
         }
 
         guardRenderSystem.process();
+        ninjaRenderSystem.process();
+        lordRenderSystem.process();
     }
 
     @Override
@@ -125,17 +129,29 @@ public class LudumDareGame extends BasicGame
         image.setFilter(Image.FILTER_NEAREST);
         tileImages.put(4, image);
 
-        image = new Image("res/guard.png");
-        image.setFilter(Image.FILTER_NEAREST);
-        
+        Image imageGuard = new Image("res/guard.png");
+        imageGuard.setFilter(Image.FILTER_NEAREST);
+        Image imageNinja = new Image("res/player.png");
+        imageNinja.setFilter(Image.FILTER_NEAREST);
+        Image imageLord = new Image("res/lord.png");
+        imageLord.setFilter(Image.FILTER_NEAREST);
+
         // Create map navigation logic
         BestFirstSearch bfs = new BestFirstSearch(map);
 
         // Create systems
         GuardSystem guardSystem = new GuardSystem();
         world.setSystem(guardSystem);
-        guardRenderSystem = new GuardRenderSystem(image);
+        guardRenderSystem = new GuardRenderSystem(imageGuard);
         world.setSystem(guardRenderSystem, true);
+
+        NinjaSystem ninjaSystem = new NinjaSystem();
+        world.setSystem(ninjaSystem);
+        ninjaRenderSystem = new NinjaRenderSystem(imageNinja);
+        world.setSystem(ninjaRenderSystem, true);
+
+        lordRenderSystem = new LordRenderSystem(imageLord);
+        world.setSystem(lordRenderSystem, true);
 
         // Create some guards
         List<MapLocation> path = new ArrayList<>();
@@ -223,6 +239,47 @@ public class LudumDareGame extends BasicGame
             gs.waitTimeBeforeMove = 15;
             guard.addComponent(gs);
         guard.addToWorld();
+
+        // Create some ninjas
+
+        path = new ArrayList<>();
+        path.add(new MapLocation(0, 34));
+        path.add(new MapLocation(15, 34));
+        path.add(new MapLocation(15, 5));
+        path.add(new MapLocation(20, 5));
+        path.add(new MapLocation(20, 3));
+        path.add(new MapLocation(31, 3));
+        path.add(new MapLocation(31, 6));
+        path.add(new MapLocation(38, 6));
+        path.add(new MapLocation(38, 7));
+        path.add(new MapLocation(39, 7));
+        path.add(new MapLocation(39, 11));
+        path.add(new MapLocation(37, 11));
+
+        Entity ninja = world.createEntity();
+            waypoint0 = path.get(0);
+            p = new Position();
+            p.xTile = waypoint0.xTile;
+            p.yTile = waypoint0.yTile;
+            ninja.addComponent(p);
+            NinjaState ns = new NinjaState();
+            ns.activity.addFirst(new Infiltrate(path));
+            ns.waitTimeBeforeMove = 8;
+            ninja.addComponent(ns);
+        ninja.addToWorld();
+
+        // Create a lord
+
+        Entity lord = world.createEntity();
+            p = new Position();
+            p.xTile = 36;
+            p.yTile = 11;
+            lord.addComponent(p);
+            LordState ls = new LordState();
+            // ls.activity.addFirst(new Infiltrate(path));
+            ls.waitTimeBeforeMove = 66;
+            lord.addComponent(ls);
+        lord.addToWorld();
 
         world.initialize();
     }

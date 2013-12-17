@@ -42,4 +42,10 @@ public class MapLocation
 
         return o.xTile == xTile && o.yTile == yTile;
     }
+    
+    @Override
+    public String toString()
+    {
+        return "Loc: (" + xTile + "," + yTile + ")";
+    }
 }

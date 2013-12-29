@@ -103,6 +103,29 @@ public class LudumDareGame extends BasicGame
         spriteRenderSystem.process();
     }
 
+    private void createGuard(List<MapLocation> waypoints, int spd, Image img)
+    {
+        Entity guard = world.createEntity();
+            MapLocation waypoint0 = waypoints.get(0);
+            Position p = new Position();
+            p.xTile = waypoint0.xTile;
+            p.yTile = waypoint0.yTile;
+            guard.addComponent(p);
+            PatrolComponent patrol = new PatrolComponent(waypoints);
+            guard.addComponent(patrol);
+            Speed speed = new Speed();
+            speed.timeToWait = spd;
+            guard.addComponent(speed);
+            Sprite sprite = new Sprite();
+            sprite.img = img;
+            guard.addComponent(sprite);
+            Vision vision = new Vision();
+            guard.addComponent(vision);
+            Guard guardC = new Guard();
+            guard.addComponent(guardC);
+        guard.addToWorld();
+    }
+
     @Override
     public void init(GameContainer c) throws SlickException
     {
@@ -138,6 +161,8 @@ public class LudumDareGame extends BasicGame
         world.setSystem(moveToSystem);
         SpeedSystem speedSystem = new SpeedSystem();
         world.setSystem(speedSystem);
+        VisionSystem visionSystem = new VisionSystem(map);
+        world.setSystem(visionSystem);
         spriteRenderSystem = new SpriteRenderSystem();
         world.setSystem(spriteRenderSystem, true);
 
@@ -148,21 +173,7 @@ public class LudumDareGame extends BasicGame
         waypoints.add(new MapLocation(28, 21));
         waypoints.add(new MapLocation(28, 11));
 
-        Entity guard = world.createEntity();
-            MapLocation waypoint0 = waypoints.get(0);
-            Position p = new Position();
-            p.xTile = waypoint0.xTile;
-            p.yTile = waypoint0.yTile;
-            guard.addComponent(p);
-            PatrolComponent patrol = new PatrolComponent(waypoints);
-            guard.addComponent(patrol);
-            Speed speed = new Speed();
-            speed.timeToWait = 25;
-            guard.addComponent(speed);
-            Sprite sprite = new Sprite();
-            sprite.img = image;
-            guard.addComponent(sprite);
-        guard.addToWorld();
+        createGuard(waypoints, 25, image);
 
         // //
 
@@ -172,21 +183,7 @@ public class LudumDareGame extends BasicGame
         waypoints.add(new MapLocation(31, 11));
         waypoints.add(new MapLocation(20, 11));
 
-        guard = world.createEntity();
-            waypoint0 = waypoints.get(0);
-            p = new Position();
-            p.xTile = waypoint0.xTile;
-            p.yTile = waypoint0.yTile;
-            guard.addComponent(p);
-            patrol = new PatrolComponent(waypoints);
-            guard.addComponent(patrol);
-            speed = new Speed();
-            speed.timeToWait = 35;
-            guard.addComponent(speed);
-            sprite = new Sprite();
-            sprite.img = image;
-            guard.addComponent(sprite);
-        guard.addToWorld();
+        createGuard(waypoints, 35, image);
 
         // //
 
@@ -198,21 +195,7 @@ public class LudumDareGame extends BasicGame
         waypoints.add(new MapLocation(29, 28));
         waypoints.add(new MapLocation(33, 28));
 
-        guard = world.createEntity();
-            waypoint0 = waypoints.get(0);
-            p = new Position();
-            p.xTile = waypoint0.xTile;
-            p.yTile = waypoint0.yTile;
-            guard.addComponent(p);
-            patrol = new PatrolComponent(waypoints);
-            guard.addComponent(patrol);
-            speed = new Speed();
-            speed.timeToWait = 15;
-            guard.addComponent(speed);
-            sprite = new Sprite();
-            sprite.img = image;
-            guard.addComponent(sprite);
-        guard.addToWorld();
+        createGuard(waypoints, 15, image);
 
         world.initialize();
     }

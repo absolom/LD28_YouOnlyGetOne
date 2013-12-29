@@ -38,7 +38,7 @@ public class TileMap
 
             tileData.add(rowData);
         }
-        
+
         numRows = tileData.size();
         numColumns = tileData.get(0).size();
     }
@@ -55,23 +55,32 @@ public class TileMap
 
     public int getTileId(int x, int y)
     {
+        if(x < 0)
+            return 0;
+        if(y < 0)
+            return 0;
+        if(x >= numColumns)
+            return 0;
+        if(y >= numRows)
+            return 0;
+
         return tileData.get(y).get(x);
     }
-    
+
     public boolean isPassable(MapLocation loc)
     {
         int id = getTileId(loc.xTile, loc.yTile);
-        
+
 //        if(id == 0)
 //        {
 //            while((id = getTileId(loc.xTile, loc.yTile)) == 0)
 //                loc.xTile -= 1;
 //            loc.xTile += 1;
-//            
+//
 //            while((id = getTileId(loc.xTile, loc.yTile)) == 0)
-//                loc.yTile += 1;                
+//                loc.yTile += 1;
 //        }
-        
+
         switch(id)
         {
             case 1:
@@ -81,8 +90,8 @@ public class TileMap
             case 3:
             case 4:
             default:
-                return false;            
-        }        
+                return false;
+        }
     }
 
     @Override

@@ -63,9 +63,11 @@ public class LudumDareGame extends BasicGame
     int timeSinceLastUpdate;
     Map<Integer, Image> tileImages;
     TileMap map;
-    GuardRenderSystem guardRenderSystem;
-    NinjaRenderSystem ninjaRenderSystem;
-    LordRenderSystem lordRenderSystem;
+
+    // GuardRenderSystem guardRenderSystem;
+    // NinjaRenderSystem ninjaRenderSystem;
+    // LordRenderSystem lordRenderSystem;
+    SpriteRenderSystem spriteRenderSystem;
 
     public LudumDareGame(TileMap map, World w)
     {
@@ -102,9 +104,10 @@ public class LudumDareGame extends BasicGame
             }
         }
 
-        guardRenderSystem.process();
-        ninjaRenderSystem.process();
-        lordRenderSystem.process();
+        // guardRenderSystem.process();
+        // ninjaRenderSystem.process();
+        // lordRenderSystem.process();
+        spriteRenderSystem.process();
     }
 
     @Override
@@ -140,208 +143,272 @@ public class LudumDareGame extends BasicGame
         BestFirstSearch bfs = new BestFirstSearch(map);
 
         // Create systems
-        GuardSystem guardSystem = new GuardSystem();
-        world.setSystem(guardSystem);
-        guardRenderSystem = new GuardRenderSystem(imageGuard);
-        world.setSystem(guardRenderSystem, true);
+        PatrolSystem patrolSystem = new PatrolSystem(bfs);
+        world.setSystem(patrolSystem);
+        MoveToSystem moveToSystem = new MoveToSystem();
+        world.setSystem(moveToSystem);
+        SpeedSystem speedSystem = new SpeedSystem();
+        world.setSystem(speedSystem);
+        spriteRenderSystem = new SpriteRenderSystem();
+        world.setSystem(spriteRenderSystem, true);
 
-        NinjaSystem ninjaSystem = new NinjaSystem();
-        world.setSystem(ninjaSystem);
-        ninjaRenderSystem = new NinjaRenderSystem(imageNinja);
-        world.setSystem(ninjaRenderSystem, true);
-
-        lordRenderSystem = new LordRenderSystem(imageLord);
-        world.setSystem(lordRenderSystem, true);
+        // NinjaSystem ninjaSystem = new NinjaSystem();
+        // world.setSystem(ninjaSystem);
 
         // Create some guards
-        List<MapLocation> path = new ArrayList<>();
-        path.add(new MapLocation(22, 11));
-        path.add(new MapLocation(22, 21));
-        path.add(new MapLocation(28, 21));
-        path.add(new MapLocation(28, 11));
-        path.add(new MapLocation(31, 11));
-        path.add(new MapLocation(31, 3));
-        path.add(new MapLocation(20, 3));
-        path.add(new MapLocation(20, 11));
+        List<MapLocation> waypoints = new ArrayList<>();
+        waypoints.add(new MapLocation(22, 11));
+        waypoints.add(new MapLocation(22, 21));
+        waypoints.add(new MapLocation(28, 21));
+        waypoints.add(new MapLocation(28, 11));
+        waypoints.add(new MapLocation(31, 11));
+        waypoints.add(new MapLocation(31, 3));
+        waypoints.add(new MapLocation(20, 3));
+        waypoints.add(new MapLocation(20, 11));
 
         Entity guard = world.createEntity();
-            MapLocation waypoint0 = path.get(0);
+            MapLocation waypoint0 = waypoints.get(0);
             Position p = new Position();
             p.xTile = waypoint0.xTile;
             p.yTile = waypoint0.yTile;
             guard.addComponent(p);
-            GuardState gs = new GuardState();
-            gs.activity.addFirst(new Patrol(path, bfs));
-            gs.waitTimeBeforeMove = 25;
-            guard.addComponent(gs);
+            PatrolComponent patrol = new PatrolComponent(waypoints);
+            guard.addComponent(patrol);
+            Speed speed = new Speed();
+            speed.timeToWait = 25;
+            guard.addComponent(speed);
+            Sprite sprite = new Sprite();
+            sprite.img = imageGuard;
+            guard.addComponent(sprite);
         guard.addToWorld();
 
-        //
+        // //
 
-        path = new ArrayList<>();
-        path.add(new MapLocation(20, 3));
-        path.add(new MapLocation(31, 3));
-        path.add(new MapLocation(31, 11));
-        path.add(new MapLocation(28, 11));
-        path.add(new MapLocation(28, 21));
-        path.add(new MapLocation(22, 21));
-        path.add(new MapLocation(22, 11));
-        path.add(new MapLocation(20, 11));
-        path.add(new MapLocation(20, 3));
+        waypoints = new ArrayList<>();
+        waypoints.add(new MapLocation(20, 3));
+        waypoints.add(new MapLocation(31, 3));
+        waypoints.add(new MapLocation(31, 11));
+        waypoints.add(new MapLocation(28, 11));
+        waypoints.add(new MapLocation(28, 21));
+        waypoints.add(new MapLocation(22, 21));
+        waypoints.add(new MapLocation(22, 11));
+        waypoints.add(new MapLocation(20, 11));
+        waypoints.add(new MapLocation(20, 3));
 
         guard = world.createEntity();
-            waypoint0 = path.get(0);
+            waypoint0 = waypoints.get(0);
             p = new Position();
             p.xTile = waypoint0.xTile;
             p.yTile = waypoint0.yTile;
             guard.addComponent(p);
-            gs = new GuardState();
-            gs.activity.addFirst(new Patrol(path, bfs));
-            gs.waitTimeBeforeMove = 35;
-            guard.addComponent(gs);
+            patrol = new PatrolComponent(waypoints);
+            guard.addComponent(patrol);
+            speed = new Speed();
+            speed.timeToWait = 35;
+            guard.addComponent(speed);
+            sprite = new Sprite();
+            sprite.img = imageGuard;
+            guard.addComponent(sprite);
         guard.addToWorld();
 
-        //
+        // //
 
-        path = new ArrayList<>();
-        path.add(new MapLocation(33, 21));
-        path.add(new MapLocation(25, 21));
-        path.add(new MapLocation(25, 26));
-        path.add(new MapLocation(20, 26));
-        path.add(new MapLocation(20, 31));
-        path.add(new MapLocation(26, 31));
-        path.add(new MapLocation(26, 34));
-        path.add(new MapLocation(38, 34));
-        path.add(new MapLocation(38, 25));
-        path.add(new MapLocation(33, 25));
+        waypoints = new ArrayList<>();
+        waypoints.add(new MapLocation(33, 21));
+        waypoints.add(new MapLocation(25, 21));
+        waypoints.add(new MapLocation(25, 26));
+        waypoints.add(new MapLocation(20, 26));
+        waypoints.add(new MapLocation(20, 31));
+        waypoints.add(new MapLocation(26, 31));
+        waypoints.add(new MapLocation(26, 34));
+        waypoints.add(new MapLocation(38, 34));
+        waypoints.add(new MapLocation(38, 25));
+        waypoints.add(new MapLocation(33, 25));
 
         guard = world.createEntity();
-            waypoint0 = path.get(0);
+            waypoint0 = waypoints.get(0);
             p = new Position();
             p.xTile = waypoint0.xTile;
             p.yTile = waypoint0.yTile;
             guard.addComponent(p);
-            gs = new GuardState();
-            gs.activity.addFirst(new Patrol(path, bfs));
-            gs.waitTimeBeforeMove = 15;
-            guard.addComponent(gs);
+            patrol = new PatrolComponent(waypoints);
+            guard.addComponent(patrol);
+            speed = new Speed();
+            speed.timeToWait = 15;
+            guard.addComponent(speed);
+            sprite = new Sprite();
+            sprite.img = imageGuard;
+            guard.addComponent(sprite);
         guard.addToWorld();
 
         //
 
-        path = new ArrayList<>();
-        path.add(new MapLocation(26, 34));
-        path.add(new MapLocation(38, 34));
-        path.add(new MapLocation(38, 16));
-        path.add(new MapLocation(28, 16));
-        path.add(new MapLocation(28, 21));
-        path.add(new MapLocation(25, 21));
-        path.add(new MapLocation(25, 26));
-        path.add(new MapLocation(20, 26));
-        path.add(new MapLocation(20, 31));
-        path.add(new MapLocation(26, 31));
+        waypoints = new ArrayList<>();
+        waypoints.add(new MapLocation(26, 34));
+        waypoints.add(new MapLocation(38, 34));
+        waypoints.add(new MapLocation(38, 16));
+        waypoints.add(new MapLocation(28, 16));
+        waypoints.add(new MapLocation(28, 21));
+        waypoints.add(new MapLocation(25, 21));
+        waypoints.add(new MapLocation(25, 26));
+        waypoints.add(new MapLocation(20, 26));
+        waypoints.add(new MapLocation(20, 31));
+        waypoints.add(new MapLocation(26, 31));
 
         guard = world.createEntity();
-            waypoint0 = path.get(0);
+            waypoint0 = waypoints.get(0);
             p = new Position();
             p.xTile = waypoint0.xTile;
             p.yTile = waypoint0.yTile;
             guard.addComponent(p);
-            gs = new GuardState();
-            gs.activity.addFirst(new Patrol(path, bfs));
-            gs.waitTimeBeforeMove = 15;
-            guard.addComponent(gs);
+            patrol = new PatrolComponent(waypoints);
+            guard.addComponent(patrol);
+            speed = new Speed();
+            speed.timeToWait = 15;
+            guard.addComponent(speed);
+            sprite = new Sprite();
+            sprite.img = imageGuard;
+            guard.addComponent(sprite);
         guard.addToWorld();
 
         // Create some ninjas
+        Entity ninja;
 
-        path = new ArrayList<>();
-        path.add(new MapLocation(0, 34));
-        path.add(new MapLocation(15, 34));
-        path.add(new MapLocation(15, 5));
-        path.add(new MapLocation(20, 5));
-        path.add(new MapLocation(20, 3));
-        path.add(new MapLocation(31, 3));
-        path.add(new MapLocation(31, 6));
-        path.add(new MapLocation(38, 6));
-        path.add(new MapLocation(38, 7));
-        path.add(new MapLocation(39, 7));
-        path.add(new MapLocation(39, 11));
-        path.add(new MapLocation(37, 11));
+        waypoints = new ArrayList<>();
+        waypoints.add(new MapLocation(0, 34));
+        waypoints.add(new MapLocation(15, 34));
+        waypoints.add(new MapLocation(15, 5));
+        waypoints.add(new MapLocation(20, 5));
+        waypoints.add(new MapLocation(20, 3));
+        waypoints.add(new MapLocation(31, 3));
+        waypoints.add(new MapLocation(31, 6));
+        waypoints.add(new MapLocation(38, 6));
+        waypoints.add(new MapLocation(38, 7));
+        waypoints.add(new MapLocation(39, 7));
+        waypoints.add(new MapLocation(39, 11));
+        waypoints.add(new MapLocation(37, 11));
 
-        Entity ninja = world.createEntity();
-            waypoint0 = path.get(0);
+        ninja = world.createEntity();
+            waypoint0 = waypoints.get(0);
             p = new Position();
             p.xTile = waypoint0.xTile;
             p.yTile = waypoint0.yTile;
             ninja.addComponent(p);
-            NinjaState ns = new NinjaState();
-            ns.activity.addFirst(new Infiltrate(path));
-            ns.waitTimeBeforeMove = 8;
-            ninja.addComponent(ns);
+            patrol = new PatrolComponent(waypoints);
+            ninja.addComponent(patrol);
+            speed = new Speed();
+            speed.timeToWait = 8;
+            ninja.addComponent(speed);
+            sprite = new Sprite();
+            sprite.img = imageNinja;
+            ninja.addComponent(sprite);
         ninja.addToWorld();
+
+        // Entity ninja = world.createEntity();
+        //     waypoint0 = path.get(0);
+        //     p = new Position();
+        //     p.xTile = waypoint0.xTile;
+        //     p.yTile = waypoint0.yTile;
+        //     ninja.addComponent(p);
+        //     NinjaState ns = new NinjaState();
+        //     ns.activity.addFirst(new Infiltrate(path));
+        //     ns.waitTimeBeforeMove = 8;
+        //     ninja.addComponent(ns);
+        // ninja.addToWorld();
 
         //
 
-        path = new ArrayList<>();
-        path.add(new MapLocation(0, 34));
-        path.add(new MapLocation(15, 34));
-        path.add(new MapLocation(15, 36));
-        path.add(new MapLocation(26, 36));
-        path.add(new MapLocation(26, 31));
-        path.add(new MapLocation(29, 31));
-        path.add(new MapLocation(29, 28));
-        path.add(new MapLocation(33, 28));
-        path.add(new MapLocation(33, 25));
-        path.add(new MapLocation(38, 25));
-        path.add(new MapLocation(38, 16));
-        path.add(new MapLocation(39, 16));
-        path.add(new MapLocation(39, 11));
-        path.add(new MapLocation(37, 11));
+        waypoints = new ArrayList<>();
+        waypoints.add(new MapLocation(0, 34));
+        waypoints.add(new MapLocation(15, 34));
+        waypoints.add(new MapLocation(15, 36));
+        waypoints.add(new MapLocation(26, 36));
+        waypoints.add(new MapLocation(26, 31));
+        waypoints.add(new MapLocation(29, 31));
+        waypoints.add(new MapLocation(29, 28));
+        waypoints.add(new MapLocation(33, 28));
+        waypoints.add(new MapLocation(33, 25));
+        waypoints.add(new MapLocation(38, 25));
+        waypoints.add(new MapLocation(38, 16));
+        waypoints.add(new MapLocation(39, 16));
+        waypoints.add(new MapLocation(39, 11));
+        waypoints.add(new MapLocation(37, 11));
 
         ninja = world.createEntity();
-            waypoint0 = path.get(0);
+            waypoint0 = waypoints.get(0);
             p = new Position();
             p.xTile = waypoint0.xTile;
             p.yTile = waypoint0.yTile;
             ninja.addComponent(p);
-            ns = new NinjaState();
-            ns.activity.addFirst(new Infiltrate(path));
-            ns.waitTimeBeforeMove = 8;
-            ninja.addComponent(ns);
+            patrol = new PatrolComponent(waypoints);
+            ninja.addComponent(patrol);
+            speed = new Speed();
+            speed.timeToWait = 8;
+            ninja.addComponent(speed);
+            sprite = new Sprite();
+            sprite.img = imageNinja;
+            ninja.addComponent(sprite);
         ninja.addToWorld();
+
+        // ninja = world.createEntity();
+        //     waypoint0 = path.get(0);
+        //     p = new Position();
+        //     p.xTile = waypoint0.xTile;
+        //     p.yTile = waypoint0.yTile;
+        //     ninja.addComponent(p);
+        //     ns = new NinjaState();
+        //     ns.activity.addFirst(new Infiltrate(path));
+        //     ns.waitTimeBeforeMove = 8;
+        //     ninja.addComponent(ns);
+        // ninja.addToWorld();
 
         //
 
-        path = new ArrayList<>();
-        path.add(new MapLocation(0, 34));
-        path.add(new MapLocation(15, 34));
-        path.add(new MapLocation(15, 11));
-        path.add(new MapLocation(22, 11));
-        path.add(new MapLocation(22, 21));
-        path.add(new MapLocation(25, 21));
-        path.add(new MapLocation(25, 26));
-        path.add(new MapLocation(29, 26));
-        path.add(new MapLocation(29, 31));
-        path.add(new MapLocation(26, 31));
-        path.add(new MapLocation(26, 34));
-        path.add(new MapLocation(38, 34));
-        path.add(new MapLocation(38, 16));
-        path.add(new MapLocation(39, 16));
-        path.add(new MapLocation(39, 11));
-        path.add(new MapLocation(37, 11));
+        waypoints = new ArrayList<>();
+        waypoints.add(new MapLocation(0, 34));
+        waypoints.add(new MapLocation(15, 34));
+        waypoints.add(new MapLocation(15, 11));
+        waypoints.add(new MapLocation(22, 11));
+        waypoints.add(new MapLocation(22, 21));
+        waypoints.add(new MapLocation(25, 21));
+        waypoints.add(new MapLocation(25, 26));
+        waypoints.add(new MapLocation(29, 26));
+        waypoints.add(new MapLocation(29, 31));
+        waypoints.add(new MapLocation(26, 31));
+        waypoints.add(new MapLocation(26, 34));
+        waypoints.add(new MapLocation(38, 34));
+        waypoints.add(new MapLocation(38, 16));
+        waypoints.add(new MapLocation(39, 16));
+        waypoints.add(new MapLocation(39, 11));
+        waypoints.add(new MapLocation(37, 11));
 
         ninja = world.createEntity();
-            waypoint0 = path.get(0);
+            waypoint0 = waypoints.get(0);
             p = new Position();
             p.xTile = waypoint0.xTile;
             p.yTile = waypoint0.yTile;
             ninja.addComponent(p);
-            ns = new NinjaState();
-            ns.activity.addFirst(new Infiltrate(path));
-            ns.waitTimeBeforeMove = 8;
-            ninja.addComponent(ns);
+            patrol = new PatrolComponent(waypoints);
+            ninja.addComponent(patrol);
+            speed = new Speed();
+            speed.timeToWait = 8;
+            ninja.addComponent(speed);
+            sprite = new Sprite();
+            sprite.img = imageNinja;
+            ninja.addComponent(sprite);
         ninja.addToWorld();
+
+        // ninja = world.createEntity();
+        //     waypoint0 = path.get(0);
+        //     p = new Position();
+        //     p.xTile = waypoint0.xTile;
+        //     p.yTile = waypoint0.yTile;
+        //     ninja.addComponent(p);
+        //     ns = new NinjaState();
+        //     ns.activity.addFirst(new Infiltrate(path));
+        //     ns.waitTimeBeforeMove = 8;
+        //     ninja.addComponent(ns);
+        // ninja.addToWorld();
 
         // Create a lord
 
@@ -350,10 +417,12 @@ public class LudumDareGame extends BasicGame
             p.xTile = 36;
             p.yTile = 11;
             lord.addComponent(p);
-            LordState ls = new LordState();
-            // ls.activity.addFirst(new Infiltrate(path));
-            ls.waitTimeBeforeMove = 66;
-            lord.addComponent(ls);
+            sprite = new Sprite();
+            sprite.img = imageLord;
+            // LordState ls = new LordState();
+            // // ls.activity.addFirst(new Infiltrate(path));
+            // ls.waitTimeBeforeMove = 66;
+            // lord.addComponent(ls);
         lord.addToWorld();
 
         world.initialize();

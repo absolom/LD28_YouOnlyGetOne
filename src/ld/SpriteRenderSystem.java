@@ -9,17 +9,15 @@ import com.artemis.EntitySystem;
 import com.artemis.annotations.Mapper;
 import com.artemis.utils.ImmutableBag;
 
-public class GuardRenderSystem extends EntitySystem
+public class SpriteRenderSystem extends EntitySystem
 {
     @Mapper ComponentMapper<Position> pm;
-    
-    Image imageGuard;
+    @Mapper ComponentMapper<Sprite> sm;
 
     @SuppressWarnings("unchecked")
-    public GuardRenderSystem(Image imageGuard)
+    public SpriteRenderSystem()
     {
-        super(Aspect.getAspectForAll(Position.class, GuardState.class));
-        this.imageGuard = imageGuard;
+        super(Aspect.getAspectForAll(Position.class, Sprite.class));
     }
 
     @Override
@@ -29,12 +27,13 @@ public class GuardRenderSystem extends EntitySystem
         {
             Entity e = entities.get(i);
             Position p = pm.get(e);
-            
+            Sprite s = sm.get(e);
+
             float d = 4f * LudumDareGame.SCALE;
             float x = p.xTile*d;
             float y = p.yTile*d;
-            
-            imageGuard.draw(x,y,LudumDareGame.SCALE);
+
+            s.img.draw(x,y,LudumDareGame.SCALE);
         }
     }
 

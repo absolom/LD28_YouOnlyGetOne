@@ -63,7 +63,7 @@ public class LudumDareGame extends BasicGame
     int timeSinceLastUpdate;
     Map<Integer, Image> tileImages;
     TileMap map;
-    GuardRenderSystem guardRenderSystem;
+    SpriteRenderSystem spriteRenderSystem;
 
     public LudumDareGame(TileMap map, World w)
     {
@@ -100,7 +100,7 @@ public class LudumDareGame extends BasicGame
             }
         }
 
-        guardRenderSystem.process();
+        spriteRenderSystem.process();
     }
 
     @Override
@@ -132,16 +132,14 @@ public class LudumDareGame extends BasicGame
         BestFirstSearch bfs = new BestFirstSearch(map);
 
         // Create systems
-        // GuardSystem guardSystem = new GuardSystem();
-        // world.setSystem(guardSystem);
         PatrolSystem patrolSystem = new PatrolSystem(bfs);
         world.setSystem(patrolSystem);
         MoveToSystem moveToSystem = new MoveToSystem();
         world.setSystem(moveToSystem);
         SpeedSystem speedSystem = new SpeedSystem();
         world.setSystem(speedSystem);
-        guardRenderSystem = new GuardRenderSystem(image);
-        world.setSystem(guardRenderSystem, true);
+        spriteRenderSystem = new SpriteRenderSystem();
+        world.setSystem(spriteRenderSystem, true);
 
         // Create some guards
         List<MapLocation> waypoints = new ArrayList<>();
@@ -161,8 +159,9 @@ public class LudumDareGame extends BasicGame
             Speed speed = new Speed();
             speed.timeToWait = 25;
             guard.addComponent(speed);
-            GuardState gs = new GuardState();
-            guard.addComponent(gs);
+            Sprite sprite = new Sprite();
+            sprite.img = image;
+            guard.addComponent(sprite);
         guard.addToWorld();
 
         // //
@@ -184,8 +183,9 @@ public class LudumDareGame extends BasicGame
             speed = new Speed();
             speed.timeToWait = 35;
             guard.addComponent(speed);
-            gs = new GuardState();
-            guard.addComponent(gs);
+            sprite = new Sprite();
+            sprite.img = image;
+            guard.addComponent(sprite);
         guard.addToWorld();
 
         // //
@@ -209,8 +209,9 @@ public class LudumDareGame extends BasicGame
             speed = new Speed();
             speed.timeToWait = 15;
             guard.addComponent(speed);
-            gs = new GuardState();
-            guard.addComponent(gs);
+            sprite = new Sprite();
+            sprite.img = image;
+            guard.addComponent(sprite);
         guard.addToWorld();
 
         world.initialize();

@@ -127,74 +127,89 @@ public class LudumDareGame extends BasicGame
 
         image = new Image("res/guard.png");
         image.setFilter(Image.FILTER_NEAREST);
-        
+
         // Create map navigation logic
         BestFirstSearch bfs = new BestFirstSearch(map);
 
         // Create systems
-        GuardSystem guardSystem = new GuardSystem();
-        world.setSystem(guardSystem);
+        // GuardSystem guardSystem = new GuardSystem();
+        // world.setSystem(guardSystem);
+        PatrolSystem patrolSystem = new PatrolSystem(bfs);
+        world.setSystem(patrolSystem);
+        MoveToSystem moveToSystem = new MoveToSystem();
+        world.setSystem(moveToSystem);
+        SpeedSystem speedSystem = new SpeedSystem();
+        world.setSystem(speedSystem);
         guardRenderSystem = new GuardRenderSystem(image);
         world.setSystem(guardRenderSystem, true);
 
         // Create some guards
-        List<MapLocation> path = new ArrayList<>();
-        path.add(new MapLocation(22, 11));
-        path.add(new MapLocation(22, 21));
-        path.add(new MapLocation(28, 21));
-        path.add(new MapLocation(28, 11));
+        List<MapLocation> waypoints = new ArrayList<>();
+        waypoints.add(new MapLocation(22, 11));
+        waypoints.add(new MapLocation(22, 21));
+        waypoints.add(new MapLocation(28, 21));
+        waypoints.add(new MapLocation(28, 11));
 
         Entity guard = world.createEntity();
-            MapLocation waypoint0 = path.get(0);
+            MapLocation waypoint0 = waypoints.get(0);
             Position p = new Position();
             p.xTile = waypoint0.xTile;
             p.yTile = waypoint0.yTile;
             guard.addComponent(p);
+            PatrolComponent patrol = new PatrolComponent(waypoints);
+            guard.addComponent(patrol);
+            Speed speed = new Speed();
+            speed.timeToWait = 25;
+            guard.addComponent(speed);
             GuardState gs = new GuardState();
-            gs.activity.addFirst(new Patrol(path, bfs));
-            gs.waitTimeBeforeMove = 25;
             guard.addComponent(gs);
         guard.addToWorld();
 
-        //
+        // //
 
-        path = new ArrayList<>();
-        path.add(new MapLocation(20, 3));
-        path.add(new MapLocation(31, 3));
-        path.add(new MapLocation(31, 11));
-        path.add(new MapLocation(20, 11));
+        waypoints = new ArrayList<>();
+        waypoints.add(new MapLocation(20, 3));
+        waypoints.add(new MapLocation(31, 3));
+        waypoints.add(new MapLocation(31, 11));
+        waypoints.add(new MapLocation(20, 11));
 
         guard = world.createEntity();
-            waypoint0 = path.get(0);
+            waypoint0 = waypoints.get(0);
             p = new Position();
             p.xTile = waypoint0.xTile;
             p.yTile = waypoint0.yTile;
             guard.addComponent(p);
+            patrol = new PatrolComponent(waypoints);
+            guard.addComponent(patrol);
+            speed = new Speed();
+            speed.timeToWait = 35;
+            guard.addComponent(speed);
             gs = new GuardState();
-            gs.activity.addFirst(new Patrol(path, bfs));
-            gs.waitTimeBeforeMove = 35;
             guard.addComponent(gs);
         guard.addToWorld();
 
-        //
+        // //
 
-        path = new ArrayList<>();
-        path.add(new MapLocation(33, 21));
-        path.add(new MapLocation(25, 21));
-        path.add(new MapLocation(25, 26));
-        path.add(new MapLocation(29, 26));
-        path.add(new MapLocation(29, 28));
-        path.add(new MapLocation(33, 28));
+        waypoints = new ArrayList<>();
+        waypoints.add(new MapLocation(33, 21));
+        waypoints.add(new MapLocation(25, 21));
+        waypoints.add(new MapLocation(25, 26));
+        waypoints.add(new MapLocation(29, 26));
+        waypoints.add(new MapLocation(29, 28));
+        waypoints.add(new MapLocation(33, 28));
 
         guard = world.createEntity();
-            waypoint0 = path.get(0);
+            waypoint0 = waypoints.get(0);
             p = new Position();
             p.xTile = waypoint0.xTile;
             p.yTile = waypoint0.yTile;
             guard.addComponent(p);
+            patrol = new PatrolComponent(waypoints);
+            guard.addComponent(patrol);
+            speed = new Speed();
+            speed.timeToWait = 15;
+            guard.addComponent(speed);
             gs = new GuardState();
-            gs.activity.addFirst(new Patrol(path, bfs));
-            gs.waitTimeBeforeMove = 15;
             guard.addComponent(gs);
         guard.addToWorld();
 

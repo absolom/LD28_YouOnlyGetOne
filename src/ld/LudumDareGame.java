@@ -39,6 +39,7 @@ public class LudumDareGame extends BasicGame
     int timeSinceLastUpdate;
     Map<Integer, Image> tileImages;
     TileMap map;
+    BestFirstSearch bfs;
 
     SpriteRenderSystem spriteRenderSystem;
 
@@ -46,13 +47,9 @@ public class LudumDareGame extends BasicGame
     {
         super("Ludum Dare 28 - YOGO chance to stop those NINJAS!");
         world = w;
-
-        map = loadMap("res/map1.csv");
-
-        this.map = map;
     }
 
-    private TileMap loadMap(String filename)
+    private TileMap loadTiles(String filename)
     {
         TileMap map = null;
 
@@ -153,10 +150,14 @@ public class LudumDareGame extends BasicGame
         ninja.addToWorld();
     }
 
-    @Override
-    public void init(GameContainer c) throws SlickException
+    private void loadMap1() throws SlickException
     {
-        timeSinceLastUpdate = 0;
+        // Load Tile data
+        map = loadTiles("res/map1.csv");
+
+        // Create map navigation logic
+        bfs = new BestFirstSearch();
+        bfs.setMap(map);
 
         // Load images
         Image image;
@@ -181,33 +182,6 @@ public class LudumDareGame extends BasicGame
         imageNinja.setFilter(Image.FILTER_NEAREST);
         Image imageLord = new Image("res/lord.png");
         imageLord.setFilter(Image.FILTER_NEAREST);
-
-        // Create map navigation logic
-        BestFirstSearch bfs = new BestFirstSearch();
-        bfs.setMap(map);
-
-        // Create systems
-        PatrolSystem patrolSystem = new PatrolSystem();
-        patrolSystem.setBestFirstSearch(bfs);
-        world.setSystem(patrolSystem);
-        MoveToSystem moveToSystem = new MoveToSystem();
-        world.setSystem(moveToSystem);
-        SpeedSystem speedSystem = new SpeedSystem();
-        world.setSystem(speedSystem);
-        VisionSystem visionSystem = new VisionSystem();
-        visionSystem.setMap(map);
-        world.setSystem(visionSystem);
-        spriteRenderSystem = new SpriteRenderSystem();
-        world.setSystem(spriteRenderSystem, true);
-
-        NinjaSystem ninjaSystem = new NinjaSystem();
-        world.setSystem(ninjaSystem);
-        GuardSystem guardSystem = new GuardSystem();
-        world.setSystem(guardSystem);
-        ArrowSystem arrowSystem = new ArrowSystem();
-        world.setSystem(arrowSystem);
-
-        world.initialize();
 
         // Create some guards
         List<MapLocation> waypoints = new ArrayList<>();
@@ -349,6 +323,39 @@ public class LudumDareGame extends BasicGame
             sprite.img = imageLord;
             lord.addComponent(sprite);
         lord.addToWorld();
+    }
+
+    @Override
+    public void init(GameContainer c) throws SlickException
+    {
+        timeSinceLastUpdate = 0;
+
+        // Create systems
+        PatrolSystem patrolSystem = new PatrolSystem();
+        world.setSystem(patrolSystem);
+        MoveToSystem moveToSystem = new MoveToSystem();
+        world.setSystem(moveToSystem);
+        SpeedSystem speedSystem = new SpeedSystem();
+        world.setSystem(speedSystem);
+        VisionSystem visionSystem = new VisionSystem();
+        world.setSystem(visionSystem);
+        spriteRenderSystem = new SpriteRenderSystem();
+        world.setSystem(spriteRenderSystem, true);
+
+        NinjaSystem ninjaSystem = new NinjaSystem();
+        world.setSystem(ninjaSystem);
+        GuardSystem guardSystem = new GuardSystem();
+        world.setSystem(guardSystem);
+        ArrowSystem arrowSystem = new ArrowSystem();
+        world.setSystem(arrowSystem);
+
+        world.initialize();
+
+        // Load map 1
+        loadMap1();
+
+        patrolSystem.setBestFirstSearch(bfs);
+        visionSystem.setMap(map);
     }
 
     @Override

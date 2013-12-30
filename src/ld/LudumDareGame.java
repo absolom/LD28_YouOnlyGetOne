@@ -40,6 +40,8 @@ public class LudumDareGame extends BasicGame
     Map<Integer, Image> tileImages;
     TileMap map;
     BestFirstSearch bfs;
+    MapLocation lordLoc;
+    boolean gameOver = false;
 
     SpriteRenderSystem spriteRenderSystem;
 
@@ -371,7 +373,7 @@ public class LudumDareGame extends BasicGame
         waypoints = new ArrayList<>();
         waypoints.add(new MapLocation(8, 20));
         waypoints.add(new MapLocation(27, 22));
-        waypoints.add(new MapLocation(34, 20));
+        waypoints.add(new MapLocation(35, 20));
 
         createNinja(waypoints, 8, imageNinja);
 
@@ -386,6 +388,8 @@ public class LudumDareGame extends BasicGame
             sprite.img = imageLord;
             lord.addComponent(sprite);
         lord.addToWorld();
+
+        lordLoc = new MapLocation(35, 20);
     }
 
     @Override
@@ -412,6 +416,9 @@ public class LudumDareGame extends BasicGame
         ArrowSystem arrowSystem = new ArrowSystem();
         world.setSystem(arrowSystem);
 
+        GameOverSystem gameOverSystem = new GameOverSystem(this);
+        world.setSystem(gameOverSystem);
+
         world.initialize();
 
         // Load map 1
@@ -419,18 +426,39 @@ public class LudumDareGame extends BasicGame
 
         patrolSystem.setBestFirstSearch(bfs);
         visionSystem.setMap(map);
+        gameOverSystem.setLordLocation(lordLoc);
     }
 
     @Override
     public void update(GameContainer container, int delta) throws SlickException
     {
-        timeSinceLastUpdate += delta;
-        while(timeSinceLastUpdate >= UPDATE_PERIOD)
+        if(!gameOver)
         {
-            world.setDelta(UPDATE_PERIOD);
-            world.process(false);
-            timeSinceLastUpdate -= UPDATE_PERIOD;
+            timeSinceLastUpdate += delta;
+            while(timeSinceLastUpdate >= UPDATE_PERIOD)
+            {
+                world.setDelta(UPDATE_PERIOD);
+                world.process(false);
+                timeSinceLastUpdate -= UPDATE_PERIOD;
+            }
         }
+        else
+        {
+            System.out.println(" ___________________________________ ");
+            System.out.println("|                                   |");
+            System.out.println("|           GAME OVER!!!            |");
+            System.out.println("|                                   |");
+            System.out.println("|YOUR HEIR IS MERCILESSLY MURDERED!!|");
+            System.out.println("|                                   |");
+            System.out.println("|               QQ                  |");
+            System.out.println("|___________________________________|");
+            System.exit(0);
+        }
+    }
+
+    public void endGame()
+    {
+        gameOver = true;
     }
 }
 

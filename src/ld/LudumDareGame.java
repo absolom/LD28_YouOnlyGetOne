@@ -196,8 +196,10 @@ public class LudumDareGame extends BasicGame
         spriteRenderSystem = new SpriteRenderSystem();
         world.setSystem(spriteRenderSystem, true);
 
-        // NinjaSystem ninjaSystem = new NinjaSystem();
-        // world.setSystem(ninjaSystem);
+        NinjaSystem ninjaSystem = new NinjaSystem();
+        world.setSystem(ninjaSystem);
+        GuardSystem guardSystem = new GuardSystem();
+        world.setSystem(guardSystem);
 
         // Create some guards
         List<MapLocation> waypoints = new ArrayList<>();

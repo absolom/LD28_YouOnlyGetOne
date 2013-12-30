@@ -27,34 +27,10 @@ public class LudumDareGame extends BasicGame
 
     static public void main(String[] args) throws SlickException
     {
-        try
-        {
-            BufferedReader in = new BufferedReader(new FileReader("res/map1.csv"));
-            String line;
-            List<String> lines = new ArrayList<>();
-            while((line = in.readLine()) != null)
-            {
-                lines.add(line);
-                System.out.println(line);
-            }
-            in.close();
+        AppGameContainer app = new AppGameContainer(new LudumDareGame(new World()));
 
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-
-            TileMap map = new TileMap();
-            map.setData(lines);
-
-            System.out.println(map.toString());
-
-            AppGameContainer app = new AppGameContainer(new LudumDareGame(map, new World()));
-
-            app.setDisplayMode(WIDTH, HEIGHT, false);
-            app.start();
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
+        app.setDisplayMode(WIDTH, HEIGHT, false);
+        app.start();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -64,17 +40,41 @@ public class LudumDareGame extends BasicGame
     Map<Integer, Image> tileImages;
     TileMap map;
 
-    // GuardRenderSystem guardRenderSystem;
-    // NinjaRenderSystem ninjaRenderSystem;
-    // LordRenderSystem lordRenderSystem;
     SpriteRenderSystem spriteRenderSystem;
 
-    public LudumDareGame(TileMap map, World w)
+    public LudumDareGame(World w)
     {
         super("Ludum Dare 28 - YOGO chance to stop those NINJAS!");
         world = w;
 
+        map = loadMap("res/map1.csv");
+
         this.map = map;
+    }
+
+    private TileMap loadMap(String filename)
+    {
+        TileMap map = null;
+
+        try
+        {
+            BufferedReader in = new BufferedReader(new FileReader(filename));
+            String line;
+            List<String> lines = new ArrayList<>();
+            while((line = in.readLine()) != null)
+                lines.add(line);
+
+            in.close();
+
+            map = new TileMap();
+            map.setData(lines);
+        }
+        catch(IOException e)
+        {
+
+        }
+
+        return map;
     }
 
     @Override
@@ -104,9 +104,6 @@ public class LudumDareGame extends BasicGame
             }
         }
 
-        // guardRenderSystem.process();
-        // ninjaRenderSystem.process();
-        // lordRenderSystem.process();
         spriteRenderSystem.process();
     }
 

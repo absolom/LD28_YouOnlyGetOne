@@ -29,6 +29,9 @@ public class MoveToSystem extends EntityProcessingSystem
         {
             MapLocation l = path.tiles.get(path.indexNextTile);
 
+            p.xTileLast = p.xTile;
+            p.yTileLast = p.yTile;
+
             p.xTile = l.xTile;
             p.yTile = l.yTile;
 

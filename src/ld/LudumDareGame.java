@@ -146,6 +146,10 @@ public class LudumDareGame extends BasicGame
             Speed speed = new Speed();
             speed.timeToWait = 8;
             ninja.addComponent(speed);
+            Vision vision = new Vision();
+            ninja.addComponent(vision);
+            Ninja ninjaC = new Ninja();
+            ninja.addComponent(ninjaC);
             Sprite sprite = new Sprite();
             sprite.img = img;
             ninja.addComponent(sprite);
@@ -200,6 +204,10 @@ public class LudumDareGame extends BasicGame
         world.setSystem(ninjaSystem);
         GuardSystem guardSystem = new GuardSystem();
         world.setSystem(guardSystem);
+        ArrowSystem arrowSystem = new ArrowSystem();
+        world.setSystem(arrowSystem);
+
+        world.initialize();
 
         // Create some guards
         List<MapLocation> waypoints = new ArrayList<>();
@@ -322,6 +330,14 @@ public class LudumDareGame extends BasicGame
 
         createNinja(waypoints, 8, imageNinja);
 
+        //
+
+        waypoints = new ArrayList<>();
+        waypoints.add(new MapLocation(25, 36));
+        waypoints.add(new MapLocation(21, 36));
+
+        createGuard(waypoints, 8, imageGuard);
+
         // Create a lord
 
         Entity lord = world.createEntity();
@@ -337,8 +353,6 @@ public class LudumDareGame extends BasicGame
             // ls.waitTimeBeforeMove = 66;
             // lord.addComponent(ls);
         lord.addToWorld();
-
-        world.initialize();
     }
 
     @Override

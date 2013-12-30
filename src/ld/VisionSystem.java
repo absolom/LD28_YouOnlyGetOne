@@ -23,7 +23,7 @@ public class VisionSystem extends EntitySystem
     @SuppressWarnings("unchecked")
     public VisionSystem(TileMap map)
     {
-        super(Aspect.getAspectForAll(Position.class, Vision.class, Guard.class, Ninja.class));
+        super(Aspect.getAspectForAll(Position.class, Vision.class).one(Guard.class, Ninja.class));
 
         this.map = map;
 
@@ -43,6 +43,9 @@ public class VisionSystem extends EntitySystem
 
             Position p = pm.get(guard);
             Vision v = vm.get(guard);
+
+            v.lookDir = MoveDirection.getDirectionTo(new MapLocation(p.xTileLast, p.yTileLast),
+                                                     new MapLocation(p.xTile, p.yTile));
 
             v.seenGuards.clear();
             v.seenNinjas.clear();
@@ -171,9 +174,13 @@ public class VisionSystem extends EntitySystem
         Guard g = gm.getSafe(e);
 
         if(g == null)
+        {
             ninjas.add(e);
+        }
         else
+        {
             guards.add(e);
+        }
     }
 
     @Override

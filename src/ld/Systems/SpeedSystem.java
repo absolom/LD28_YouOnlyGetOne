@@ -1,4 +1,6 @@
-package ld;
+package ld.Systems;
+
+import ld.Components.Speed;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;

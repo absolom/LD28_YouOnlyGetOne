@@ -1,4 +1,7 @@
-package ld;
+package ld.Systems;
+
+import ld.Components.Ninja;
+import ld.Components.Position;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;

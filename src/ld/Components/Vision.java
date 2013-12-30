@@ -1,9 +1,12 @@
-package ld;
+package ld.Components;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import ld.Map.MoveDirection;
 
 import com.artemis.Component;
 import com.artemis.Entity;
-import java.util.List;
-import java.util.ArrayList;
 
 public class Vision extends Component
 {

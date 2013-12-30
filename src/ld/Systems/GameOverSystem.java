@@ -1,4 +1,9 @@
-package ld;
+package ld.Systems;
+
+import ld.LudumDareGame;
+import ld.Components.Ninja;
+import ld.Components.Position;
+import ld.Map.MapLocation;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;

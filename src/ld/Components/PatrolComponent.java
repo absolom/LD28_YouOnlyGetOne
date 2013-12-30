@@ -1,8 +1,10 @@
-package ld;
+package ld.Components;
+
+import java.util.List;
+
+import ld.Map.MapLocation;
 
 import com.artemis.Component;
-import java.util.List;
-import java.util.ArrayList;
 
 public class PatrolComponent extends Component
 {

@@ -1,4 +1,16 @@
-package ld;
+package ld.Systems;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import ld.Components.Guard;
+import ld.Components.Ninja;
+import ld.Components.Position;
+import ld.Components.Vision;
+import ld.Map.MapLocation;
+import ld.Map.MoveDirection;
+import ld.Map.TileMap;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
@@ -6,8 +18,6 @@ import com.artemis.Entity;
 import com.artemis.EntitySystem;
 import com.artemis.annotations.Mapper;
 import com.artemis.utils.ImmutableBag;
-
-import java.util.*;
 
 public class VisionSystem extends EntitySystem
 {

@@ -1,4 +1,11 @@
-package ld;
+package ld.Systems;
+
+import ld.Components.Path;
+import ld.Components.PatrolComponent;
+import ld.Components.Position;
+import ld.Components.Speed;
+import ld.Map.BestFirstSearch;
+import ld.Map.MapLocation;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;

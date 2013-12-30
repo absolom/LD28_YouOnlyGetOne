@@ -1,4 +1,4 @@
-package ld;
+package ld.Map;
 
 public enum MoveDirection
 {
@@ -8,7 +8,7 @@ public enum MoveDirection
     WEST,
     NONE;
 
-    static MoveDirection getDirectionTo(MapLocation start, MapLocation end)
+    public static MoveDirection getDirectionTo(MapLocation start, MapLocation end)
     {
         double dX = end.xTile - start.xTile;
         double dY = end.yTile - start.yTile;

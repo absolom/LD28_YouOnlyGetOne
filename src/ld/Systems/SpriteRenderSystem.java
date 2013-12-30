@@ -1,6 +1,8 @@
-package ld;
+package ld.Systems;
 
-import org.newdawn.slick.Image;
+import ld.LudumDareGame;
+import ld.Components.Position;
+import ld.Components.Sprite;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;

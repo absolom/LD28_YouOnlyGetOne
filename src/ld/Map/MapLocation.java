@@ -1,4 +1,4 @@
-package ld;
+package ld.Map;
 
 public class MapLocation
 {

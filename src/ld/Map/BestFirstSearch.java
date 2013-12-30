@@ -1,4 +1,4 @@
-package ld;
+package ld.Map;
 
 import java.util.ArrayList;
 import java.util.Collections;

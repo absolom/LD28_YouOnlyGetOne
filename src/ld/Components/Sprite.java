@@ -1,7 +1,8 @@
-package ld;
+package ld.Components;
+
+import org.newdawn.slick.Image;
 
 import com.artemis.Component;
-import org.newdawn.slick.Image;
 
 public class Sprite extends Component
 {

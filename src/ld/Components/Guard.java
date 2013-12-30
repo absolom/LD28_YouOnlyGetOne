@@ -1,4 +1,4 @@
-package ld;
+package ld.Components;
 
 import com.artemis.Component;
 

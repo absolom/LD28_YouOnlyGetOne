@@ -8,6 +8,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ld.Components.Guard;
+import ld.Components.Ninja;
+import ld.Components.PatrolComponent;
+import ld.Components.Position;
+import ld.Components.Speed;
+import ld.Components.Sprite;
+import ld.Components.Vision;
+import ld.Map.BestFirstSearch;
+import ld.Map.MapLocation;
+import ld.Map.TileMap;
+import ld.Systems.ArrowSystem;
+import ld.Systems.GameOverSystem;
+import ld.Systems.GuardSystem;
+import ld.Systems.MoveToSystem;
+import ld.Systems.NinjaSystem;
+import ld.Systems.PatrolSystem;
+import ld.Systems.SpeedSystem;
+import ld.Systems.SpriteRenderSystem;
+import ld.Systems.VisionSystem;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
@@ -246,7 +266,6 @@ public class LudumDareGame extends BasicGame
         createGuard(waypoints, 15, imageGuard);
 
         // Create some ninjas
-        Entity ninja;
 
         waypoints = new ArrayList<>();
         waypoints.add(new MapLocation(0, 34));

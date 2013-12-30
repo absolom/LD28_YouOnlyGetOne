@@ -21,14 +21,17 @@ public class VisionSystem extends EntitySystem
     TileMap map;
 
     @SuppressWarnings("unchecked")
-    public VisionSystem(TileMap map)
+    public VisionSystem()
     {
         super(Aspect.getAspectForAll(Position.class, Vision.class).one(Guard.class, Ninja.class));
 
-        this.map = map;
-
         guards = new ArrayList<>();
         ninjas = new ArrayList<>();
+    }
+
+    public void setMap(TileMap map)
+    {
+        this.map = map;
     }
 
     @Override

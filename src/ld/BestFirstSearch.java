@@ -14,7 +14,11 @@ public class BestFirstSearch
 {
     TileMap map;
 
-    public BestFirstSearch(TileMap map)
+    public BestFirstSearch()
+    {
+    }
+
+    public void setMap(TileMap map)
     {
         this.map = map;
     }
@@ -25,7 +29,7 @@ public class BestFirstSearch
         {
             @Override
             public int compare(MapLocation l0, MapLocation l1)
-            {                
+            {
                 double d0 = Math.sqrt(Math.pow(l0.xTile - destLoc.xTile,2) +
                                       Math.pow(l0.yTile - destLoc.yTile,2));
                 double d1 = Math.sqrt(Math.pow(l1.xTile - destLoc.xTile,2) +
@@ -56,7 +60,7 @@ public class BestFirstSearch
                 return buildPath(parents, n);
 
             // check where we can go next from our current location
-            MoveDirection[] directions = {MoveDirection.NORTH, MoveDirection.EAST, 
+            MoveDirection[] directions = {MoveDirection.NORTH, MoveDirection.EAST,
                     MoveDirection.SOUTH, MoveDirection.WEST};
             for(int i = 0; i < directions.length; i++)
             {

@@ -16,9 +16,13 @@ public class PatrolSystem extends EntityProcessingSystem
     BestFirstSearch bfs;
 
     @SuppressWarnings("unchecked")
-    public PatrolSystem(BestFirstSearch bfs)
+    public PatrolSystem()
     {
         super(Aspect.getAspectForAll(Position.class, PatrolComponent.class));
+    }
+
+    public void setBestFirstSearch(BestFirstSearch bfs)
+    {
         this.bfs = bfs;
     }
 

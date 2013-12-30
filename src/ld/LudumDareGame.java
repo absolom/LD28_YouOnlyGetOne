@@ -186,16 +186,19 @@ public class LudumDareGame extends BasicGame
         imageLord.setFilter(Image.FILTER_NEAREST);
 
         // Create map navigation logic
-        BestFirstSearch bfs = new BestFirstSearch(map);
+        BestFirstSearch bfs = new BestFirstSearch();
+        bfs.setMap(map);
 
         // Create systems
-        PatrolSystem patrolSystem = new PatrolSystem(bfs);
+        PatrolSystem patrolSystem = new PatrolSystem();
+        patrolSystem.setBestFirstSearch(bfs);
         world.setSystem(patrolSystem);
         MoveToSystem moveToSystem = new MoveToSystem();
         world.setSystem(moveToSystem);
         SpeedSystem speedSystem = new SpeedSystem();
         world.setSystem(speedSystem);
-        VisionSystem visionSystem = new VisionSystem(map);
+        VisionSystem visionSystem = new VisionSystem();
+        visionSystem.setMap(map);
         world.setSystem(visionSystem);
         spriteRenderSystem = new SpriteRenderSystem();
         world.setSystem(spriteRenderSystem, true);
@@ -348,10 +351,6 @@ public class LudumDareGame extends BasicGame
             Sprite sprite = new Sprite();
             sprite.img = imageLord;
             lord.addComponent(sprite);
-            // LordState ls = new LordState();
-            // // ls.activity.addFirst(new Infiltrate(path));
-            // ls.waitTimeBeforeMove = 66;
-            // lord.addComponent(ls);
         lord.addToWorld();
     }
 

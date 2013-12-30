@@ -110,6 +110,48 @@ public class LudumDareGame extends BasicGame
         spriteRenderSystem.process();
     }
 
+    private void createGuard(List<MapLocation> waypoints, int spd, Image img)
+    {
+        Entity guard = world.createEntity();
+            MapLocation waypoint0 = waypoints.get(0);
+            Position p = new Position();
+            p.xTile = waypoint0.xTile;
+            p.yTile = waypoint0.yTile;
+            guard.addComponent(p);
+            PatrolComponent patrol = new PatrolComponent(waypoints);
+            guard.addComponent(patrol);
+            Speed speed = new Speed();
+            speed.timeToWait = spd;
+            guard.addComponent(speed);
+            Sprite sprite = new Sprite();
+            sprite.img = img;
+            guard.addComponent(sprite);
+            Vision vision = new Vision();
+            guard.addComponent(vision);
+            Guard guardC = new Guard();
+            guard.addComponent(guardC);
+        guard.addToWorld();
+    }
+
+    private void createNinja(List<MapLocation> waypoints, int spd, Image img)
+    {
+        Entity ninja = world.createEntity();
+            MapLocation waypoint0 = waypoints.get(0);
+            Position p = new Position();
+            p.xTile = waypoint0.xTile;
+            p.yTile = waypoint0.yTile;
+            ninja.addComponent(p);
+            PatrolComponent patrol = new PatrolComponent(waypoints);
+            ninja.addComponent(patrol);
+            Speed speed = new Speed();
+            speed.timeToWait = 8;
+            ninja.addComponent(speed);
+            Sprite sprite = new Sprite();
+            sprite.img = img;
+            ninja.addComponent(sprite);
+        ninja.addToWorld();
+    }
+
     @Override
     public void init(GameContainer c) throws SlickException
     {
@@ -149,6 +191,8 @@ public class LudumDareGame extends BasicGame
         world.setSystem(moveToSystem);
         SpeedSystem speedSystem = new SpeedSystem();
         world.setSystem(speedSystem);
+        VisionSystem visionSystem = new VisionSystem(map);
+        world.setSystem(visionSystem);
         spriteRenderSystem = new SpriteRenderSystem();
         world.setSystem(spriteRenderSystem, true);
 
@@ -166,21 +210,7 @@ public class LudumDareGame extends BasicGame
         waypoints.add(new MapLocation(20, 3));
         waypoints.add(new MapLocation(20, 11));
 
-        Entity guard = world.createEntity();
-            MapLocation waypoint0 = waypoints.get(0);
-            Position p = new Position();
-            p.xTile = waypoint0.xTile;
-            p.yTile = waypoint0.yTile;
-            guard.addComponent(p);
-            PatrolComponent patrol = new PatrolComponent(waypoints);
-            guard.addComponent(patrol);
-            Speed speed = new Speed();
-            speed.timeToWait = 25;
-            guard.addComponent(speed);
-            Sprite sprite = new Sprite();
-            sprite.img = imageGuard;
-            guard.addComponent(sprite);
-        guard.addToWorld();
+        createGuard(waypoints, 25, imageGuard);
 
         // //
 
@@ -195,21 +225,7 @@ public class LudumDareGame extends BasicGame
         waypoints.add(new MapLocation(20, 11));
         waypoints.add(new MapLocation(20, 3));
 
-        guard = world.createEntity();
-            waypoint0 = waypoints.get(0);
-            p = new Position();
-            p.xTile = waypoint0.xTile;
-            p.yTile = waypoint0.yTile;
-            guard.addComponent(p);
-            patrol = new PatrolComponent(waypoints);
-            guard.addComponent(patrol);
-            speed = new Speed();
-            speed.timeToWait = 35;
-            guard.addComponent(speed);
-            sprite = new Sprite();
-            sprite.img = imageGuard;
-            guard.addComponent(sprite);
-        guard.addToWorld();
+        createGuard(waypoints, 35, imageGuard);
 
         // //
 
@@ -225,21 +241,7 @@ public class LudumDareGame extends BasicGame
         waypoints.add(new MapLocation(38, 25));
         waypoints.add(new MapLocation(33, 25));
 
-        guard = world.createEntity();
-            waypoint0 = waypoints.get(0);
-            p = new Position();
-            p.xTile = waypoint0.xTile;
-            p.yTile = waypoint0.yTile;
-            guard.addComponent(p);
-            patrol = new PatrolComponent(waypoints);
-            guard.addComponent(patrol);
-            speed = new Speed();
-            speed.timeToWait = 15;
-            guard.addComponent(speed);
-            sprite = new Sprite();
-            sprite.img = imageGuard;
-            guard.addComponent(sprite);
-        guard.addToWorld();
+        createGuard(waypoints, 15, imageGuard);
 
         //
 
@@ -255,21 +257,7 @@ public class LudumDareGame extends BasicGame
         waypoints.add(new MapLocation(20, 31));
         waypoints.add(new MapLocation(26, 31));
 
-        guard = world.createEntity();
-            waypoint0 = waypoints.get(0);
-            p = new Position();
-            p.xTile = waypoint0.xTile;
-            p.yTile = waypoint0.yTile;
-            guard.addComponent(p);
-            patrol = new PatrolComponent(waypoints);
-            guard.addComponent(patrol);
-            speed = new Speed();
-            speed.timeToWait = 15;
-            guard.addComponent(speed);
-            sprite = new Sprite();
-            sprite.img = imageGuard;
-            guard.addComponent(sprite);
-        guard.addToWorld();
+        createGuard(waypoints, 15, imageGuard);
 
         // Create some ninjas
         Entity ninja;
@@ -288,33 +276,7 @@ public class LudumDareGame extends BasicGame
         waypoints.add(new MapLocation(39, 11));
         waypoints.add(new MapLocation(37, 11));
 
-        ninja = world.createEntity();
-            waypoint0 = waypoints.get(0);
-            p = new Position();
-            p.xTile = waypoint0.xTile;
-            p.yTile = waypoint0.yTile;
-            ninja.addComponent(p);
-            patrol = new PatrolComponent(waypoints);
-            ninja.addComponent(patrol);
-            speed = new Speed();
-            speed.timeToWait = 8;
-            ninja.addComponent(speed);
-            sprite = new Sprite();
-            sprite.img = imageNinja;
-            ninja.addComponent(sprite);
-        ninja.addToWorld();
-
-        // Entity ninja = world.createEntity();
-        //     waypoint0 = path.get(0);
-        //     p = new Position();
-        //     p.xTile = waypoint0.xTile;
-        //     p.yTile = waypoint0.yTile;
-        //     ninja.addComponent(p);
-        //     NinjaState ns = new NinjaState();
-        //     ns.activity.addFirst(new Infiltrate(path));
-        //     ns.waitTimeBeforeMove = 8;
-        //     ninja.addComponent(ns);
-        // ninja.addToWorld();
+        createNinja(waypoints, 8, imageNinja);
 
         //
 
@@ -334,33 +296,7 @@ public class LudumDareGame extends BasicGame
         waypoints.add(new MapLocation(39, 11));
         waypoints.add(new MapLocation(37, 11));
 
-        ninja = world.createEntity();
-            waypoint0 = waypoints.get(0);
-            p = new Position();
-            p.xTile = waypoint0.xTile;
-            p.yTile = waypoint0.yTile;
-            ninja.addComponent(p);
-            patrol = new PatrolComponent(waypoints);
-            ninja.addComponent(patrol);
-            speed = new Speed();
-            speed.timeToWait = 8;
-            ninja.addComponent(speed);
-            sprite = new Sprite();
-            sprite.img = imageNinja;
-            ninja.addComponent(sprite);
-        ninja.addToWorld();
-
-        // ninja = world.createEntity();
-        //     waypoint0 = path.get(0);
-        //     p = new Position();
-        //     p.xTile = waypoint0.xTile;
-        //     p.yTile = waypoint0.yTile;
-        //     ninja.addComponent(p);
-        //     ns = new NinjaState();
-        //     ns.activity.addFirst(new Infiltrate(path));
-        //     ns.waitTimeBeforeMove = 8;
-        //     ninja.addComponent(ns);
-        // ninja.addToWorld();
+        createNinja(waypoints, 8, imageNinja);
 
         //
 
@@ -382,43 +318,18 @@ public class LudumDareGame extends BasicGame
         waypoints.add(new MapLocation(39, 11));
         waypoints.add(new MapLocation(37, 11));
 
-        ninja = world.createEntity();
-            waypoint0 = waypoints.get(0);
-            p = new Position();
-            p.xTile = waypoint0.xTile;
-            p.yTile = waypoint0.yTile;
-            ninja.addComponent(p);
-            patrol = new PatrolComponent(waypoints);
-            ninja.addComponent(patrol);
-            speed = new Speed();
-            speed.timeToWait = 8;
-            ninja.addComponent(speed);
-            sprite = new Sprite();
-            sprite.img = imageNinja;
-            ninja.addComponent(sprite);
-        ninja.addToWorld();
-
-        // ninja = world.createEntity();
-        //     waypoint0 = path.get(0);
-        //     p = new Position();
-        //     p.xTile = waypoint0.xTile;
-        //     p.yTile = waypoint0.yTile;
-        //     ninja.addComponent(p);
-        //     ns = new NinjaState();
-        //     ns.activity.addFirst(new Infiltrate(path));
-        //     ns.waitTimeBeforeMove = 8;
-        //     ninja.addComponent(ns);
-        // ninja.addToWorld();
+        createNinja(waypoints, 8, imageNinja);
 
         // Create a lord
 
         Entity lord = world.createEntity();
-            p = new Position();
+            Position p = new Position();
             p.xTile = 36;
             p.yTile = 11;
             lord.addComponent(p);
-            sprite = new Sprite();
+            Sprite sprite = new Sprite();
             sprite.img = imageLord;
+            lord.addComponent(sprite);
             // LordState ls = new LordState();
             // // ls.activity.addFirst(new Infiltrate(path));
             // ls.waitTimeBeforeMove = 66;

@@ -325,6 +325,69 @@ public class LudumDareGame extends BasicGame
         lord.addToWorld();
     }
 
+    private void loadMap2() throws SlickException
+    {
+        // Load Tile data
+        map = loadTiles("res/map2.csv");
+
+        // Create map navigation logic
+        bfs = new BestFirstSearch();
+        bfs.setMap(map);
+
+        // Load images
+        Image image;
+
+        tileImages = new HashMap<>();
+        image = new Image("res/path.png");
+        image.setFilter(Image.FILTER_NEAREST);
+        tileImages.put(1, image);
+        image = new Image("res/test_tile3.png");
+        image.setFilter(Image.FILTER_NEAREST);
+        tileImages.put(2, image);
+        image = new Image("res/forest_tiles_med0.png");
+        image.setFilter(Image.FILTER_NEAREST);
+        tileImages.put(3, image);
+        image = new Image("res/grass.png");
+        image.setFilter(Image.FILTER_NEAREST);
+        tileImages.put(4, image);
+
+        Image imageGuard = new Image("res/guard.png");
+        imageGuard.setFilter(Image.FILTER_NEAREST);
+        Image imageNinja = new Image("res/player.png");
+        imageNinja.setFilter(Image.FILTER_NEAREST);
+        Image imageLord = new Image("res/lord.png");
+        imageLord.setFilter(Image.FILTER_NEAREST);
+
+        // Create some guards
+        List<MapLocation> waypoints = new ArrayList<>();
+        waypoints.add(new MapLocation(33, 22));
+        waypoints.add(new MapLocation(33, 12));
+
+        createGuard(waypoints, 25, imageGuard);
+
+        // Create some ninjas
+        Entity ninja;
+
+        waypoints = new ArrayList<>();
+        waypoints.add(new MapLocation(8, 20));
+        waypoints.add(new MapLocation(27, 22));
+        waypoints.add(new MapLocation(34, 20));
+
+        createNinja(waypoints, 8, imageNinja);
+
+        // Create a lord
+
+        Entity lord = world.createEntity();
+            Position p = new Position();
+            p.xTile = 35;
+            p.yTile = 20;
+            lord.addComponent(p);
+            Sprite sprite = new Sprite();
+            sprite.img = imageLord;
+            lord.addComponent(sprite);
+        lord.addToWorld();
+    }
+
     @Override
     public void init(GameContainer c) throws SlickException
     {
@@ -352,7 +415,7 @@ public class LudumDareGame extends BasicGame
         world.initialize();
 
         // Load map 1
-        loadMap1();
+        loadMap2();
 
         patrolSystem.setBestFirstSearch(bfs);
         visionSystem.setMap(map);

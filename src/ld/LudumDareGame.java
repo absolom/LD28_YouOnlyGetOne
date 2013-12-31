@@ -8,25 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ld.Components.Guard;
-import ld.Components.Ninja;
-import ld.Components.PatrolComponent;
-import ld.Components.Position;
-import ld.Components.Speed;
-import ld.Components.Sprite;
-import ld.Components.Vision;
+import ld.Components.*;
 import ld.Map.BestFirstSearch;
 import ld.Map.MapLocation;
 import ld.Map.TileMap;
-import ld.Systems.ArrowSystem;
-import ld.Systems.GameOverSystem;
-import ld.Systems.GuardSystem;
-import ld.Systems.MoveToSystem;
-import ld.Systems.NinjaSystem;
-import ld.Systems.PatrolSystem;
-import ld.Systems.SpeedSystem;
-import ld.Systems.SpriteRenderSystem;
-import ld.Systems.VisionSystem;
+import ld.Systems.*;
+import ld.Input.*;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
@@ -160,7 +147,7 @@ public class LudumDareGame extends BasicGame
             PatrolComponent patrol = new PatrolComponent(waypoints);
             ninja.addComponent(patrol);
             Speed speed = new Speed();
-            speed.timeToWait = 8;
+            speed.timeToWait = spd;
             ninja.addComponent(speed);
             Vision vision = new Vision();
             ninja.addComponent(vision);
@@ -170,6 +157,24 @@ public class LudumDareGame extends BasicGame
             sprite.img = img;
             ninja.addComponent(sprite);
         ninja.addToWorld();
+    }
+
+    private void createGhost(MapLocation spawnLoc, int spd, Image img)
+    {
+        Entity ghost = world.createEntity();
+            Position p = new Position();
+            p.xTile = spawnLoc.xTile;
+            p.yTile = spawnLoc.yTile;
+            ghost.addComponent(p);
+            Speed speed = new Speed();
+            speed.timeToWait = spd;
+            ghost.addComponent(speed);
+            Ghost ghostC = new Ghost();
+            ghost.addComponent(ghostC);
+            Sprite sprite = new Sprite();
+            sprite.img = img;
+            ghost.addComponent(sprite);
+        ghost.addToWorld();
     }
 
     private void loadMap1() throws SlickException
@@ -378,6 +383,8 @@ public class LudumDareGame extends BasicGame
         imageNinja.setFilter(Image.FILTER_NEAREST);
         Image imageLord = new Image("res/lord.png");
         imageLord.setFilter(Image.FILTER_NEAREST);
+        Image imageGhost = new Image("res/ghost.png");
+        imageGhost.setFilter(Image.FILTER_NEAREST);
 
         // Create some guards
         List<MapLocation> waypoints = new ArrayList<>();
@@ -409,12 +416,20 @@ public class LudumDareGame extends BasicGame
         lord.addToWorld();
 
         lordLoc = new MapLocation(35, 20);
+
+        // Create ghost
+
+        createGhost(new MapLocation(33,17), 33, imageGhost);
     }
 
     @Override
     public void init(GameContainer c) throws SlickException
     {
         timeSinceLastUpdate = 0;
+
+        // Create input listener
+        Mapper mapper = new Mapper();
+        c.getInput().addKeyListener(mapper);
 
         // Create systems
         PatrolSystem patrolSystem = new PatrolSystem();
@@ -434,6 +449,8 @@ public class LudumDareGame extends BasicGame
         world.setSystem(guardSystem);
         ArrowSystem arrowSystem = new ArrowSystem();
         world.setSystem(arrowSystem);
+        GhostSystem ghostSystem = new GhostSystem();
+        world.setSystem(ghostSystem);
 
         GameOverSystem gameOverSystem = new GameOverSystem(this);
         world.setSystem(gameOverSystem);
@@ -445,7 +462,9 @@ public class LudumDareGame extends BasicGame
 
         patrolSystem.setBestFirstSearch(bfs);
         visionSystem.setMap(map);
+        ghostSystem.setMap(map);
         gameOverSystem.setLordLocation(lordLoc);
+        mapper.setGhostSystem(ghostSystem);
     }
 
     @Override

@@ -50,9 +50,6 @@ public class GuardSystem extends EntityProcessingSystem
             ninja.changedInWorld();
         }
 
-        // Check if the guard has seen a ninja
-        // If it has, shoot the ninja!
-
         // Entity arrow = world.createEntity();
 
         // Check if the guard heard a noise

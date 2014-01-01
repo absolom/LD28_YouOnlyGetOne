@@ -2,21 +2,34 @@ package ld.Input;
 
 import org.newdawn.slick.*;
 import com.artemis.*;
+import com.artemis.utils.*;
 import ld.Map.*;
 import ld.Systems.*;
+import ld.Components.*;
+import java.util.*;
 
-public class Mapper implements KeyListener, MouseListener
+public class Mapper extends EntitySystem implements KeyListener, MouseListener
 {
     Input input;
     GhostSystem sys;
+    Entity ghost;
+    List<Entity> guards;
 
     public Mapper()
     {
+        super(Aspect.getAspectForAll(Guard.class, Position.class));
+
+        guards = new ArrayList<>();
     }
 
     public void setGhostSystem(GhostSystem ghostSystem)
     {
         sys = ghostSystem;
+    }
+
+    public void setGhostEntity(Entity ghost)
+    {
+        this.ghost = ghost;
     }
 
     @Override
@@ -95,5 +108,31 @@ public class Mapper implements KeyListener, MouseListener
            key == Input.KEY_DOWN ||
            key == Input.KEY_LEFT)
             sys.stopMoving();
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+
+    @Override
+    protected void inserted(Entity e)
+    {
+        guards.add(e);
+    }
+
+    @Override
+    protected void removed(Entity e)
+    {
+        guards.remove(e);
+    }
+
+    @Override
+    protected boolean checkProcessing()
+    {
+        return false;
+    }
+
+    @Override
+    protected void processEntities(ImmutableBag<Entity> entities)
+    {
+
     }
 }

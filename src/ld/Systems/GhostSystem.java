@@ -44,6 +44,11 @@ public class GhostSystem extends EntityProcessingSystem
         shouldMove = false;
     }
 
+    public void tapGuard()
+    {
+
+    }
+
     @Override
     protected void process(Entity e)
     {
